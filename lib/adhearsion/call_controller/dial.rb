@@ -188,12 +188,12 @@ module Adhearsion
             ignoring_missing_joins { @call.unjoin call.id }
             if split_controller = targets[:others]
               logger.info "Executing split controller #{split_controller} on #{call.id}"
-              call.execute_controller split_controller.new(call, 'current_dial' => self), targets[:others_callback]
+              call.execute_controller split_controller.new(call, @others_metadata.merge(current_dial: self)), targets[:others_callback]
             end
           end
           if split_controller = targets[:main]
             logger.info "Executing split controller #{split_controller} on main call"
-            @call.execute_controller split_controller.new(@call, 'current_dial' => self), targets[:main_callback]
+            @call.execute_controller split_controller.new(@call, @main_metadata.merge(current_dial: self)), targets[:main_callback]
           end
         end
 
@@ -293,6 +293,9 @@ module Adhearsion
 
           @confirmation_controller = @options.delete :confirm
           @confirmation_metadata = @options.delete :confirm_metadata
+
+          @main_metadata = @options.delete :main_metadata
+          @others_metadata = @options.delete :others_metadata
 
           @skip_cleanup = false
         end
