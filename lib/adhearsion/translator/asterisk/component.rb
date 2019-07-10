@@ -64,6 +64,10 @@ module Adhearsion
             set_node_response Adhearsion::Rayo::Ref.new uri: id
           end
 
+          def register_ref
+            @component_node.register_ref Adhearsion::Rayo::Ref.new uri: id
+          end
+
           def with_error(name, text)
             set_node_response Adhearsion::ProtocolError.new.setup(name, text)
           end

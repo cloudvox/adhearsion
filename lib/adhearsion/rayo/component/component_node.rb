@@ -43,12 +43,14 @@ module Adhearsion
 
         def response=(other)
           @mutex.synchronize do
-            if other.is_a?(Ref)
-              @component_id = other.component_id
-              @source_uri = other.uri.to_s
-              client.register_component self if client
-            end
+            internal_register_ref other if other.is_a?(Ref)
             super
+          end
+        end
+
+        def register_ref(ref)
+          @mutex.synchronize do
+            internal_register_ref ref
           end
         end
 
@@ -83,6 +85,14 @@ module Adhearsion
         def stop!(options = {})
           raise InvalidActionError, "Cannot stop a #{self.class.name.split("::").last} that is #{state}" unless executing?
           stop_action.tap { |action| write_action action }
+        end
+
+        private
+
+        def internal_register_ref(ref)
+          @component_id = ref.component_id
+          @source_uri = ref.uri.to_s
+          client.register_component self if client
         end
       end
     end
