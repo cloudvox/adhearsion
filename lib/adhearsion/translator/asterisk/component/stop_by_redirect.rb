@@ -21,7 +21,11 @@ module Adhearsion
             call.register_handler :ami, [{name: 'AsyncAGI', [:[], 'SubEvent'] => 'Start'}, {name: 'AsyncAGIStart'}] do |event|
               send_complete_event complete_reason
             end
-            call.redirect_back
+            begin
+              call.redirect_back
+            rescue ChannelGoneError
+              logger.info 'Channel went away'
+            end
           end
         end
       end
