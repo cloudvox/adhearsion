@@ -12,3 +12,5 @@ group :test do
   # #kind_of? or #is_a? methods  but it responds to neigher of two methods.
   gem 'rspec-expectations', '< 3.8.3'
 end
+
+# comment in order to create a PR for travis build
