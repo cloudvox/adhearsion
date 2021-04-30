@@ -2064,6 +2064,25 @@ module Adhearsion
                 expect(fut.value).to eq({code: 200, result: 123, data: 'timeout'})
               end
             end
+
+            context 'of type Hangup' do
+              let :ami_event do
+                RubyAMI::Event.new 'Hangup',
+                  'Uniqueid'      => "1320842458.8",
+                  'Calleridnum'   => "5678",
+                  'Calleridname'  => "Jane Smith",
+                  'Cause'         => '16',
+                  'Cause-txt'     => 'Normal Clearing',
+                  'Channel'       => "SIP/1234-00000000"
+              end
+
+              it 'should return nil' do
+                fut = Celluloid::Future.new { subject.execute_agi_command 'EXEC ANSWER' }
+                sleep 0.25
+                subject.process_ami_event ami_event
+                expect(fut.value).to be_nil
+              end
+            end
           end
 
           describe 'when receiving an Asterisk 13 AsyncAGIExec event' do

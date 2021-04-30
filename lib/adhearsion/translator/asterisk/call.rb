@@ -309,7 +309,7 @@ module Adhearsion
         end
 
         #
-        # @return [Hash] AGI result
+        # @return [Hash, nil] AGI result, or nil if it is detected that the call is hung up.
         #
         # @raises RubyAMI::Error, ChannelGoneError
         def execute_agi_command(command, *params)
